@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            text-align: left;
+            margin: 0;
+            padding: 20px;
+        }
+
+        label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        select {
+            font-size: 16px;
+            padding: 8px;
+        }
+
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        object {
+            width: 100%;
+            height: 500px; /* 设置合适的高度，根据需要调整 */
+        }
+
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            select, button {
+                width: 100%;
+            }
+        }
+
+        /* Styles for the modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+    <label for="directorySelector">选择PDF文件：</label>
+    <select id="directorySelector">
+        <option value="三角函数.pdf">三角函数</option>
+        <option value="复数.pdf">复数</option>
+        <option value="平面向量.pdf">平面向量</option>
+        <option value="解三角形.pdf">解三角形</option>
+        <option value="立体几何和空间向量.pdf">立体几何和空间向量</option>
+        <option value="直线与圆.pdf">直线与圆</option>
+        <option value="圆锥曲线.pdf">圆锥曲线</option>
+        <option value="数列.pdf">数列</option>
+        <option value="21-23真题.pdf">21-23真题</option>
+    </select>
+
+    <button onclick="openPDF()">打开PDF</button>
+
+    <br><br>
+
+    <button onclick="openExternalLink()">跳转到外部链接</button>
+
+    <p id="greeting">
+        1. 复习三角函数解三角形平面向量复数立体几何与空间向量，<br>
+           并完成模块化训练题目。<br><br>
+        2. 预习解析几何，数列模块，并完成模块化训练题目。<br>
+           注意事项：每日上传自己的学习内容和笔记，开学带来，<br>
+           先看前面的示范，再做题，看示范的时候做笔记，拍照上传！<br>
+           最后还有21-23真题，有余力的同学可以做一些学过的。<br>
+           开学来了最少写完一个本！<br><br>
+        寒假快乐！！！
+    </p>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="modal" id="modal">
+        <p id="modalContent"></p>
+        <button onclick="closeModal()">关闭</button>
+    </div>
+
+    <div id="currentTime"></div>
+
+    <script>
+        // Function to get the current date and time
+        function getCurrentDateTime() {
+            const now = new Date();
+            const date = now.toLocaleDateString();
+            const time = now.toLocaleTimeString();
+            return `${date} ${time}`;
+        }
+
+        // Function to update the current time in the DOM
+        function updateCurrentTime() {
+            const currentTimeElement = document.getElementById('currentTime');
+            currentTimeElement.textContent = `当前时间：${getCurrentDateTime()}`;
+        }
+
+        setInterval(updateCurrentTime, 1000); // Update every second
+
+        function openPDF() {
+            var selectedPDF = document.getElementById("directorySelector").value;
+
+            // Remove previously embedded PDF
+            var existingObject = document.querySelector('object');
+            if (existingObject) {
+                existingObject.remove();
+            }
+
+            // Create and embed new PDF
+            var object = document.createElement('object');
+            object.data = selectedPDF;
+            object.type = 'application/pdf';
+            document.body.appendChild(object);
+        }
+
+        function openExternalLink() {
+            var externalLink = "https://6xjfb8-my.sharepoint.com/:f:/g/personal/bnm_6xjfb8_onmicrosoft_com/EjAY1yX1HTpAiYdCIUfU0EUBJEwgvWOvn3YR45Hm8As_rQ";
+            window.open(externalLink, '_blank');
+        }
+
+        // Function to open the modal
+        function openModal() {
+            var modal = document.getElementById('modal');
+            var overlay = document.getElementById('overlay');
+            var modalContent = document.getElementById('modalContent');
+
+            modalContent.textContent = `当前时间：${getCurrentDateTime()}，本次打卡已记录。`;
+
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            var modal = document.getElementById('modal');
+            var overlay = document.getElementById('overlay');
+
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+        // Open the modal when the page loads
+        window.onload = function() {
+            openModal();
+        };
+    </script>
+
+</body>
+</html>
